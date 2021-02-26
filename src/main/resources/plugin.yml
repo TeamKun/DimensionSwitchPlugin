@@ -1,0 +1,4 @@
+name: DimensionSwitchPlugin
+version: ${project.version}
+main: net.kunmc.lab.dimensionswitchplugin.DimensionSwitchPlugin
+api-version: 1.15

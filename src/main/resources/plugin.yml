@@ -2,3 +2,12 @@ name: DimensionSwitchPlugin
 version: ${project.version}
 main: net.kunmc.lab.dimensionswitchplugin.DimensionSwitchPlugin
 api-version: 1.15
+authors: [ YukiAt ]
+
+commands:
+  dimension:
+    permission: dimensionswitchplugin.dimension
+
+permissions:
+  dimensionswitchplugin.dimension:
+    default: op

@@ -6,7 +6,7 @@
 
     <groupId>net.kunmc.lab</groupId>
     <artifactId>DimensionSwitchPlugin</artifactId>
-    <version>v1.1</version>
+    <version>v1.2</version>
     <packaging>jar</packaging>
 
     <name>DimensionSwitchPlugin</name>

@@ -30,8 +30,8 @@ public class Timer extends BukkitRunnable {
 
             Bukkit.getOnlinePlayers().forEach(player -> {
                 Location location = player.getLocation();
-                if (location.getY() > 126) {
-                    location.setY(126);
+                if (location.getY() > 120) {
+                    location.setY(120);
                 }
                 location.setWorld(Bukkit.getWorld(getNextDimension(currentDimension).getName()));
                 player.teleport(location);

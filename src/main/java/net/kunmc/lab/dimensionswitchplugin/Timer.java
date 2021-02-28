@@ -2,6 +2,8 @@ package net.kunmc.lab.dimensionswitchplugin;
 
 import com.destroystokyo.paper.Title;
 import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Timer extends BukkitRunnable {
@@ -12,7 +14,7 @@ public class Timer extends BukkitRunnable {
 
     public Timer(int interval) {
         startTime = System.currentTimeMillis();
-        this.interval = interval;
+        setInterval(interval);
         currentDimension = Dimension.OVERWORLD;
     }
 
@@ -27,15 +29,20 @@ public class Timer extends BukkitRunnable {
             startTime = System.currentTimeMillis();
 
             Bukkit.getOnlinePlayers().forEach(player -> {
-                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
                 Location location = player.getLocation();
+                if (location.getY() > 126) {
+                    location.setY(126);
+                }
                 location.setWorld(Bukkit.getWorld(getNextDimension(currentDimension).getName()));
                 player.teleport(location);
+                player.teleport(location);
+                player.playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
             });
             currentDimension = getNextDimension(currentDimension);
 
             return;
-        } else if (remainingTime % 60 == 0 && remainingTime != prevRemainningTime) {
+        }
+        else if (remainingTime % 60 == 0 && remainingTime != prevRemainningTime) {
             Bukkit.getOnlinePlayers().forEach(player -> {
                 player.sendTitle("", "残り" + ChatColor.RED + remainingTime / 60 + ChatColor.WHITE + "分！！！",
                         10, 40, 10);
@@ -43,10 +50,22 @@ public class Timer extends BukkitRunnable {
             });
         }
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            player.sendActionBar("残り" + ChatColor.RED + remainingTime + ChatColor.WHITE + "秒で" +
-                    ChatColor.GOLD + getNextDimension(currentDimension).getDisplayName() + ChatColor.WHITE + "に転送されます！！！");
-        });
+        if (remainingTime <= 5) {
+            if (remainingTime == prevRemainningTime) {
+                return;
+            }
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                player.sendActionBar(" ");
+                player.updateTitle(new Title("", "残り" + ChatColor.RED + remainingTime + ChatColor.WHITE + "秒！！！",
+                        0, 20, 10));
+                player.playSound(player.getLocation(), Sound.BLOCK_BELL_USE, 1.0f, 1.0f);
+            });
+        } else {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                player.sendActionBar("残り" + ChatColor.RED + remainingTime + ChatColor.WHITE + "秒で" +
+                        ChatColor.GOLD + getNextDimension(currentDimension).getDisplayName() + ChatColor.WHITE + "に転送されます！！！");
+            });
+        }
 
         prevRemainningTime = remainingTime;
     }
